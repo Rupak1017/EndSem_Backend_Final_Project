@@ -1,0 +1,36 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Define the Student model
+model Student {
+  id            Int           @id @default(autoincrement())
+  username      String
+  password      String
+  // Define any other fields you need for the Student model
+  registrations Registration[]
+}
+
+// Define the Course model
+model Course {
+  id          Int           @id @default(autoincrement())
+  name        String
+  instructor  String
+  // Define any other fields you need for the Course model
+  registrations Registration[]
+}
+
+// Define the Registration model
+model Registration {
+  id        Int      @id @default(autoincrement())
+  student   Student  @relation(fields: [studentId], references: [id])
+  studentId Int
+  course    Course   @relation(fields: [courseId], references: [id])
+  courseId  Int
+}
